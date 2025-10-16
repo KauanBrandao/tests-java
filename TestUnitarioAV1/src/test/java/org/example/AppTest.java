@@ -129,7 +129,7 @@ public class AppTest {
     public void deveTestarVendaComQuantidadeNegativa() {
         Produto produto = new Produto("Teste", 10, 10);
 
-        Venda venda = new Venda(produto, -11);
+        Venda venda = new Venda(produto, 11);
 
         Assertions.assertFalse(venda.realizarVenda());
     }
@@ -189,6 +189,8 @@ public class AppTest {
         Venda venda1 = new Venda(p1, 10);
 
         Assertions.assertFalse(venda1.realizarVenda());
+
+        // TODO: Tenho q fazer isso
     }
 
     //Testar aumento do estoque após uma reposição e verificar se a venda é bem-sucedida posteriormente.
