@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProductTest {
+public class ProductRepositoryTest {
 
     private ProductRepository productRepository;
 
@@ -78,6 +78,8 @@ public class ProductTest {
         productRepository.update(product1.getId(), productAtualizado);
 
         Assertions.assertEquals(product1.getDescription(), productAtualizado.getDescription());
+
+
 
     }
 
