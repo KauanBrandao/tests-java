@@ -1,6 +1,7 @@
 package com.snack.repositories;
 
 import com.snack.entities.Product;
+import com.snack.services.ProductService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,14 +11,18 @@ import java.util.NoSuchElementException;
 public class ProductServiceTest {
 
     private ProductRepository productRepository;
-
+    private ProductService productService;
     private Product product;
+    private Product product2;
 
 
     @BeforeEach
     public void setUp() {
         productRepository = new ProductRepository();
+        productService = new ProductService();
         product = new Product(1, "Teste", 18, "");
+
+        product2 = new Product(2, "Teste", 18, null);
 
         productRepository.append(product);
 
@@ -26,47 +31,47 @@ public class ProductServiceTest {
 
     @Test
     public void deveSalvarImagemComSucesso() {
-        String img = "/images/img.jpeg";
 
-        product.setImage(img);
-
-        Assertions.assertEquals(img, productRepository.getById(1).getImage());
+        productService.save(product);
+        Assertions.assertEquals("/home/kauan/Downloads/1.", productService.getImagePathById(1));
     }
 
     @Test
     public void deveTestarSalvarImagemInexistente() {
-        String img = "/images/img2.jpeg";
-
-        product.setImage(img);
-
-        Assertions.assertEquals(img, productRepository.getById(1).getImage());
+        Assertions.assertThrows(NoSuchElementException.class, () -> {
+            String img = productService.getImagePathById(2);
+            product2.setImage(img);
+            productService.save(product2);
+        });
     }
 
 
     @Test
     public void deveAtualizarUmProdutoExistente() {
-        Product produtoAtualizado = new Product(1, "Produto atualizado", 20, "");
+        Product produtoASerAtualizado = new Product(1, "Produto atualizado", 20, "teste atualizado");
 
+        productService.save(product);
 
-        productRepository.update(1, produtoAtualizado);
+        productService.update(produtoASerAtualizado);
 
-        Assertions.assertEquals("Produto atualizado", productRepository.getById(1).getDescription());
-
+        Assertions.assertEquals("/home/kauan/Downloads/1.", product.getImage());
     }
 
     @Test
     public void deveTestarExcluirUmProduto() {
 
-        productRepository.remove(1);
+        productService.save(product);
+        productService.remove(1);
 
         Assertions.assertThrows(NoSuchElementException.class, () -> {
-            productRepository.getById(1);
+            productService.getImagePathById(1);
         });
     }
 
     @Test
     public void deveObterCaminhoDaImagemPorId() {
 
-        Assertions.assertEquals("", productRepository.getById(1).getImage());
+        productService.save(product);
+        Assertions.assertEquals("/home/kauan/Downloads/1.", productService.getImagePathById(1));
     }
 }
